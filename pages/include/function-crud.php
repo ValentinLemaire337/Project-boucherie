@@ -6,6 +6,9 @@
      * $remi = connectToDatabase();
      * var_dump($remi);
      */
+
+    cryptPassword("Mike");
+
     $message = false;
     
     require_once "../include/config.php";
@@ -53,14 +56,29 @@
             ":email" => $clients["email"], 
             ":firstname" => $clients["firstname"],
             ":phonenumber" => $clients["phonenumber"],
-            ":encrypte" => $clients["password"]
+            ":encrypte" => cryptPassword($clients["password"])
         );
 
         $request>execute($array);
 
-        return $GLOBALS["bdd"]->lastIn
+        return $GLOBALS["bdd"]->lastInsertId();
     }
 
+
+    function cryptPassword($password)
+    {
+        $crypt = "$2a$10$".sha1(rand(11,22)."Mike".uniqid()."Mike".rand(11,22));
+        $newPassword = crypt($password, $crypt);
+        var_dump($password);
+        var_dump($crypt);
+        var_dump($newPassword);
+    }
+
+    function comparePassword($hashed_password, $password)
+    {
+        return(hash_equals($hashed_password, crypt($password, $hashed_password))) ? true : false ;
+       
+    }
     
     
 
