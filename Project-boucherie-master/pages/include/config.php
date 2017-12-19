@@ -4,4 +4,4 @@
     define("DATABASE_USER", "root");
     define("DATABASE_PASS", "");
     define("DATABASE_NAME", "boucherie");
-    define("DOMAINE", "http://localhost/Mike/php/Dashboard");
+    define("DOMAINE", "http://localhost/webforce3/Mike/Php/Project/");

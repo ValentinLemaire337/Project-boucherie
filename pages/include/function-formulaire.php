@@ -37,7 +37,7 @@
                 if($retour != true) // si la valeur change ( suite à la condition dans le second foreach), il return false
                     return false;
             }
-            return $retour;
+            return true;
         }
     }
 
