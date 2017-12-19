@@ -1,3 +1,16 @@
+<?php
+
+    session_start();
+    require("include/function-crud.php");
+    logOut();
+
+    if(isset($_SESSION["User"]))
+    {
+        header('Location: index.html');
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -78,9 +91,18 @@
                 })
                 .done(function( user ) {
                     if(user.error)
+                    {
+                        $("#message").text(user.message);
                         console.warn(user.message)
+                    }  
                     else
-                        console.info(user)
+                    {
+                        var date = new Date();
+                        date.setTime(date.getTime() + (2 * 24 * 60 * 60 * 1000))
+                        document.cookie = "User="+JSON.stringify(user)+"; expires="+date.toUTCString();
+                        window.location.href("index.php");
+                    }
+                        
                 })
                 .fail(function( jqXHR, textStatus ) {
                     alert( "Request failed: " + textStatus );

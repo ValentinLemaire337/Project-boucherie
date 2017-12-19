@@ -1,58 +1,75 @@
 <?php
-    require "include/config.php";
+
+    session_start();
+    if(isset($_SESSION["User"]))
+    {
+        header('Location: index.html');
+    }
+
+    require_once "include/config.php";
+    
     $message = "";
     
-    if(!empty($_POST)){
+    if(!empty($_POST))
+    {
 
-        // Require Function
-        require("include/function-form.php");
-        require("include/function-crud.php");
-
+var_dump($_POST);
+        require_once("include/function-formulaire.php");
+        require_once("include/function-crud.php");
         $dataToVerif = Array("firstname", "lastname", "password", "phonenumber", "email");
 
         if(!verifParam($_POST, $dataToVerif)):
             $message .= "<p> Erreur d'envoi d'information. </p>";
         
-        elseif(!verifEmailSyntaxe($_POST["email"])):
-            $message .= "<p> Votre adresse e-mail est invalide </p>";
+            elseif(!verifEmailSyntaxe($_POST["email"])):
+                $message .= "<p> Votre adresse e-mail est invalide </p>";
         
-        else:
+                else:
 
-            $retour = true;
+                    $retour = true;
 
-            if( strlen($_POST["firstname"]) > 70 ) {
-                $message .= "<p> Votre Prenom doit etre compris entre 2 et 70 caractere </p>";
-                $retour = false;
-            }
+                    if( strlen($_POST["firstname"]) > 70 )
+                    {
+                        $message .= "<p> Votre Prenom doit etre compris entre 2 et 70 caractere </p>";
+                        $retour = false;
+                    }
 
-            if( strlen($_POST["lastname"]) > 70 ){
-                $message .= "<p> Votre Nom doit etre compris entre 2 et 70 caractere </p>";
-                $retour = false;
-            }
+                    if( strlen($_POST["lastname"]) > 70 )
+                    {
+                        $message .= "<p> Votre Nom doit etre compris entre 2 et 70 caractere </p>";
+                        $retour = false;
+                    }
 
-            $_POST["phonenumber"] = str_replace(" ", "", $_POST["phonenumber"]);
-            $_POST["phonenumber"] = str_replace(".", "", $_POST["phonenumber"]);
-            $_POST["phonenumber"] = str_replace(",", "", $_POST["phonenumber"]);
-            $_POST["phonenumber"] = str_replace("-", "", $_POST["phonenumber"]);
+                    $_POST["phonenumber"] = str_replace(" ", "", $_POST["phonenumber"]);
+                    $_POST["phonenumber"] = str_replace(".", "", $_POST["phonenumber"]);
+                    $_POST["phonenumber"] = str_replace(",", "", $_POST["phonenumber"]);
+                    $_POST["phonenumber"] = str_replace("-", "", $_POST["phonenumber"]);
 
-            if( strlen($_POST["phonenumber"]) > 10 ){
-                $message .= "<p> Votre numero de telephone doit etre faire 10 caractere et doit etre des chiffres</p>";
-                $retour = false;
-            }
+                    if( strlen($_POST["phonenumber"]) > 10 )
+                    {
+                        $message .= "<p> Votre numero de telephone doit faire 10 caractere et doit etre des chiffres</p>";
+                        $retour = false;
+                    }
 
-            if(emailExiste($_POST["email"])){
-                $message = "<p> Deja inscrit, <a href='login.php' >Connecter-vous</a></p>";
-                $retour = false;
-            }
+                    if($emailExiste($_POST["email"]))
+                    {
+                        $message .= "<p> Deja inscrit, <a href=''> connectez-vous </a></p>";
+                        $retour = false;
 
+                    }
 
-            if($retour == true){
-                $toto = registerClient($_POST);
-                var_dump($toto);
-                // header('Location: index.html');
-                // exit;
-            }
-            
+                    if($retour == true)
+                    {
+                        registerClient($_POST);  //register user
+                        $_POST["idclients"] = $id;  // ajoute id à array POST
+                        unset($_POST["password"]);   // supprime le password de l'array
+                        $_SESSION["User"] = $_POST ;    // créer une session user
+                        header('Location: index.php'); // redirection
+                        // exit;
+                    }
+
+                   
+                    
         endif;
     }
 ?>

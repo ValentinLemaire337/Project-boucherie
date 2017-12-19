@@ -1,3 +1,23 @@
+<?php
+
+    
+
+        if(isset($COOKIE["User"]))
+        {
+            $user = json_decode($_COOKIE["user"]);
+            $_SESSION["User"] = (array)$user->user;
+        }
+
+        if(!isset($_SESSION["User"]))
+        {
+            header('Location: login.php');
+        }
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,7 +56,7 @@
 </head>
 
 <body>
-
+    <?= var_dump($_COOKIE);  ?>
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -48,7 +68,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">SB Admin v2.0</a>
+                <a class="navbar-brand" href="index.php">Bienvenue <?= $_SESSION["User"]["firstname"]; ?></a>   <!-- peut etre modifier en ["User"]->"firstname"
             </div>
             <!-- /.navbar-header -->
 
@@ -253,7 +273,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="login.php"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -358,7 +378,7 @@
                                     <a href="blank.html">Blank Page</a>
                                 </li>
                                 <li>
-                                    <a href="login.html">Login Page</a>
+                                    <a href="login.php">Login Page</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

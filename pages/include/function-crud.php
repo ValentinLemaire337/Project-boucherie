@@ -107,3 +107,11 @@
         unset($user["encrypte"]); // Supprimer une elements d'un array
         return $user;
     }
+
+    function logOut()
+    {
+        setcookie("User", "", time()-3600); // création d'un cookie
+        unset($_COOKIE["User"]);       
+        unset($_SESSION);
+        session_destroy();
+    }
